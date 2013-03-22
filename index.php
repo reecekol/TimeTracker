@@ -1,3 +1,9 @@
+<?php
+ $conn=mysql_connect("localhost","root","");
+ 
+ mysql_select_db("tracker",$conn) or die(" An Error Occured with the database");
+
+?>
 <!doctype>
 <html lang="en">
   <head>
@@ -31,9 +37,8 @@
  <?php
    if(0){
   echo "   
-  <table>
-  
-  </table>
+ 
+ 
   ";
   }
   else 
@@ -41,7 +46,7 @@
   
     echo "<div><p>No New Projects</p></div>";
   }
-  if(isset($_POST['pname']))
+  if(isset($_POST['pname']) && isset($_POST['esthrs']) && isset($_POST['esthrs']))
   {
   
    
@@ -54,6 +59,6 @@
 	     <label>Est Hrs</label><input type="text" name="esthrs"/>
 		 <label>Total Hrs</label><input type="text" name="totalhrs"/>
 	  </form>
-	 <button>Add New Project</button>
+	 <button>Add/Update Project</button>
   <div>
 </body>
