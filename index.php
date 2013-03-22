@@ -19,6 +19,10 @@
 	  
 	  }
 	  
+	  
+	  button{
+	   display:block;
+	  }
 	</style>
   </head>
 <body id="container">
@@ -37,9 +41,19 @@
   
     echo "<div><p>No New Projects</p></div>";
   }
+  if(isset($_POST['pname']))
+  {
+  
+   
+  }
+  
   ?>
   <div id="project">
-      <label>Project Name</label><input type="text"/><label>Est Hrs</label><input type="text"/><label>Total Hrs</label><input type="text"/>
+      <form id="new_project">
+         <label>Project Name</label><input type="text" name="pname" />
+	     <label>Est Hrs</label><input type="text" name="esthrs"/>
+		 <label>Total Hrs</label><input type="text" name="totalhrs"/>
+	  </form>
 	 <button>Add New Project</button>
   <div>
 </body>
