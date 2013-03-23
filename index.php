@@ -7,12 +7,42 @@
 <!doctype>
 <html lang="en">
   <head>
+     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	 <script>
+	   $("document").ready(function()
+	   {
+	     $(".entry").click(function(){
+		   
+		   
+		   var projectName=$(this).children("span.projname").text();
+		   var estHrs=$(this).children("span.est").text();
+		   var totHrs=$(this).children("span.tot").text();
+		   var projtoUpdate=$(this).children(".projno input").attr("value");
+		   
+		   console.log(projtoUpdate);
+		   alert(projtoUpdate);
+		   
+		   
+		   $("#pname").val(projectName);
+		   $("#esthrs").val(estHrs);
+		   $("#tothrs").val(totHrs);
+		   
+		  
+		   alert(projtoUpdate);
+		 });
+	   
+	   
+	   });
+	  
+	 </script>
     <title>Time Tracker </title>
 	
 	<style> 
 	  #logo {
 	   font-size:32px;
 	   color:4433F5;
+	   padding-bottom:10px;
 	  }
 	  
 	  #container{
@@ -30,10 +60,22 @@
 	   display:block;
 	  }
 	  
-	  #entry{
+	  .entry{
 	  
-	   padding-top:40px;
+	   padding-top:20px;
+	   padding-bottom:20px;
+	   padding-left:40px;
+	   border-bottom:1px solid #EDEDEB;
 	   
+	  }
+	  
+	  .entry:hover{
+	   background-color:#F7EDAB;
+	  }
+	  
+	  .projname,.tot,.est{
+	   display:inline-block;
+	   width:200px;
 	  }
 	</style>
   </head>
@@ -41,16 +83,35 @@
  <div id="logo">Time Tracker</div>
   
  <?php
-   $query="SELECT * FROM project_tracker";
+   
+  if(isset($_POST['pname']) && isset($_POST['esthrs']) && isset($_POST['totalhrs']) && !empty($_POST['pname']))
+  {
+   
+	if(isset($_POST['update_no']) && !empty($_POST['update_no']) )
+	{
+	  
+	  $query="UPDATE project_tracker SET project_name='$_POST[pname]' ,tothrs='$_POST[totalhrs]', esthrs='$_POST[esthrs]' WHERE id=$_POST[update_no] ";
+	  mysql_query($query);
+	  
+	}
+	else
+	{
+    $query="INSERT into project_tracker VALUES('','$_POST[pname]','$_POST[esthrs]','$_POST[totalhrs]')";
+	mysql_query($query);
+	}
+	
+  }
+  
+  $query="SELECT * FROM project_tracker";
    $result=mysql_query($query);
-   echo mysql_num_rows($result);
    if(mysql_num_rows($result)>0){
-      echo "<div>";
+      echo "<div><span class='projname'><em>Project Name</em></span> <span class='est'><em>Estimate</em></span><span class='tot'><em>Total</em></span></div>";
       while($row=mysql_fetch_row($result))
       {
 	  
 	    // print_r($row);
-            echo "<div id='entry'>".$row['1'] . $row['2'] .$row['3']."</div><form method='post' action='index.php'></form>" ;
+            echo "<div class='entry'>"."<span class='projname'>".$row['1']."</span>"."<span class='est'>".$row['2'].
+			"</span>"."<span class='tot'>".$row['3']."</span>"."<span class='projno'><input type='hidden' value='".$row['0']."'></span></div>" ;
       }
   
   }
@@ -59,23 +120,15 @@
   
     echo "<div><p>No New Projects</p></div>";
   }
-  if(isset($_POST['pname']) && isset($_POST['esthrs']) && isset($_POST['totalhrs']) && !empty($_POST['pname']))
-  {
-   
-	 
-    $query="INSERT into project_tracker VALUES('','$_POST[pname]','$_POST[esthrs]','$_POST[totalhrs]')";
-	mysql_query($query);
-	
-  }
-  
   ?>
   <div id="project">
       <form id="new_project" method="post" action="index.php">
-         <label>Project Name</label><input type="text" name="pname" />
-	     <label>Est Hrs</label><input type="text" name="esthrs"/>
-		 <label>Total Hrs</label><input type="text" name="totalhrs"/>
-		 <input type="submit"/>
+         <label>Project Name</label><input type="text" name="pname" id="pname"/>
+	     <label>Est Hrs</label><input type="text" name="esthrs" id="esthrs"/>
+		 <label>Total Hrs</label><input type="text" name="totalhrs" id="tothrs"/>
+		 <input type="hidden" value="1" name="update_no"/>
+		 <input type="submit" value="Add/Update Project"/>
 	  </form>
-	 <button>Add/Update Project</button>
+
   <div>
 </body>
