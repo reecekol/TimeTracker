@@ -14,22 +14,17 @@
 	   {
 	     $(".entry").click(function(){
 		   
-		   
+		   //Read values from project when clicked
 		   var projectName=$(this).children("span.projname").text();
 		   var estHrs=$(this).children("span.est").text();
 		   var totHrs=$(this).children("span.tot").text();
-		   var projtoUpdate=$(this).children(".projno input").attr("value");
+		   var projtoUpdate=$(this).find(".hiddeninput").val();
 		   
-		   console.log(projtoUpdate);
-		   alert(projtoUpdate);
-		   
-		   
+		   //update from fields... poor mans edit :) 
 		   $("#pname").val(projectName);
 		   $("#esthrs").val(estHrs);
 		   $("#tothrs").val(totHrs);
-		   
-		  
-		   alert(projtoUpdate);
+		   $("#update_no").val(projtoUpdate);
 		 });
 	   
 	   
@@ -40,42 +35,39 @@
 	
 	<style> 
 	  #logo {
-	   font-size:32px;
-	   color:4433F5;
-	   padding-bottom:10px;
+	     font-size:32px;
+	     color:4433F5;
+	     padding-bottom:10px;
 	  }
 	  
 	  #container{
-	   width:960px;
-	   margin:0 auto;
+	     width:960px;
+	     margin:0 auto;
 	  }
 	  
 	  #project {
-	   padding-top:50px;
-	  
+	     padding-top:50px;
 	  }
 	  
 	  
 	  button{
-	   display:block;
+	     display:block;
 	  }
 	  
-	  .entry{
-	  
-	   padding-top:20px;
-	   padding-bottom:20px;
-	   padding-left:40px;
-	   border-bottom:1px solid #EDEDEB;
-	   
+	  .entry{  
+	     padding-top:20px;
+	     padding-bottom:20px;
+	     padding-left:40px;
+	     border-bottom:1px solid #EDEDEB;
 	  }
 	  
 	  .entry:hover{
-	   background-color:#F7EDAB;
+	     background-color:#F7EDAB;
 	  }
 	  
 	  .projname,.tot,.est{
-	   display:inline-block;
-	   width:200px;
+	     display:inline-block;
+	     width:200px;
 	  }
 	</style>
   </head>
@@ -89,6 +81,8 @@
    
 	if(isset($_POST['update_no']) && !empty($_POST['update_no']) )
 	{
+	
+	   echo $_POST['update_no'];
 	  
 	  $query="UPDATE project_tracker SET project_name='$_POST[pname]' ,tothrs='$_POST[totalhrs]', esthrs='$_POST[esthrs]' WHERE id=$_POST[update_no] ";
 	  mysql_query($query);
@@ -109,24 +103,23 @@
       while($row=mysql_fetch_row($result))
       {
 	  
-	    // print_r($row);
             echo "<div class='entry'>"."<span class='projname'>".$row['1']."</span>"."<span class='est'>".$row['2'].
-			"</span>"."<span class='tot'>".$row['3']."</span>"."<span class='projno'><input type='hidden' value='".$row['0']."'></span></div>" ;
+			"</span>"."<span class='tot'>".$row['3']."</span>"."<span class='projno'><input type='hidden' class='hiddeninput' value='".$row['0']."'></span></div>" ;
       }
   
   }
   else 
   {
-  
     echo "<div><p>No New Projects</p></div>";
   }
   ?>
   <div id="project">
+  
       <form id="new_project" method="post" action="index.php">
          <label>Project Name</label><input type="text" name="pname" id="pname"/>
 	     <label>Est Hrs</label><input type="text" name="esthrs" id="esthrs"/>
 		 <label>Total Hrs</label><input type="text" name="totalhrs" id="tothrs"/>
-		 <input type="hidden" value="1" name="update_no"/>
+		 <input type="hidden" value="" name="update_no" id="update_no"/>
 		 <input type="submit" value="Add/Update Project"/>
 	  </form>
 
